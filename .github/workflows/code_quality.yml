@@ -9,8 +9,15 @@ jobs:
     name: "Flake8 stylecheck"
     runs-on: [ubuntu-latest]
     steps:
+      - name: Set up Python ${{ std_python_version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ std_python_version }}
       - name: Install flake8
-        run: pip3 install flake8
+        run: |
+          python --version
+          pip3 --version
+          pip3 install flake8
       - name: Syntax check
         # stop the build if there are Python syntax errors or undefined names
         run: python3 -m flake8 --count --select=E9,F63,F7,F82 --show-source --statistics command tests
@@ -19,11 +26,18 @@ jobs:
         run: python3 -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics command tests
         
   pylint:
-    name: "Pylint"
+    name: "Pylint static code analysis"
     runs-on: [ubuntu-latest]
     steps:
+#       - name: Set up Python ${{ std_python_version }}
+#         uses: actions/setup-python@v1
+#         with:
+#           python-version: ${{ std_python_version }}
       - name: Install pylint
-        run: pip3 install pylint
+        run:  |
+          python --version
+          pip3 --version
+          pip3 install pylint setuptools
       - name: Code analysis
         # stop the build if there are Python syntax errors or undefined names
         run: python3 -m pylint command
@@ -39,13 +53,12 @@ jobs:
         python-version: [3.6, 3.7]
 
     steps:
-    - name: "Git checkout"
-      uses: actions/checkout@v1
-      
 #     - name: Set up Python ${{ matrix.python-version }}
 #       uses: actions/setup-python@v1
 #       with:
 #         python-version: ${{ matrix.python-version }}
+    - name: "Git checkout"
+      uses: actions/checkout@v1
 
     - name: Install dependencies with pipenv
       uses: VaultVulp/action-pipenv@master

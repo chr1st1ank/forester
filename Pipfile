@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[dev-packages]
+advbumpversion = "*"
+flake8 = "*"
+tox = "*"
+coverage = "*"
+pytest = "*"
+
+[packages]
+command = {path = ".", editable = true}

@@ -2,17 +2,17 @@ name: Code Quality
 
 on: [push]
 env: 
-  std_python_version: 3.7
+  STD_PYTHON: "3.7"
 
 jobs:
   flake8:
     name: "Flake8 stylecheck"
     runs-on: [ubuntu-latest]
     steps:
-      - name: Set up Python ${{ std_python_version }}
+      - name: Set up Python ${{ env.STD_PYTHON }}
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ std_python_version }}
+          python-version: ${{ env.STD_PYTHON }}
       - name: Install flake8
         run: |
           python --version
@@ -53,20 +53,34 @@ jobs:
         python-version: [3.6, 3.7]
 
     steps:
-#     - name: Set up Python ${{ matrix.python-version }}
-#       uses: actions/setup-python@v1
-#       with:
-#         python-version: ${{ matrix.python-version }}
-    - name: "Git checkout"
-      uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies with pipenv
-      uses: VaultVulp/action-pipenv@master
-      with:
-        args: install --dev
-    
-    - name: Run tests
-      uses: VaultVulp/action-pipenv@master
-      with:
-        args: run pytest tests
+      - name: "Git checkout"
+        uses: actions/checkout@v1
+
+      - name: Install pipenv
+        run:  |
+          python --version
+          pip3 --version
+          pip3 install pip pipenv setuptools
+          pipenv install --dev
+          
+      - name: Run tests
+        run:  |
+          python --version
+          pip3 --version
+          pipenv run pytest tests
+          
+#       - name: Install dependencies with pipenv
+#         uses: VaultVulp/action-pipenv@master
+#         with:
+#           args: install --dev
+
+#       - name: Run tests
+#         uses: VaultVulp/action-pipenv@master
+#         with:
+#           args: run pytest tests
 

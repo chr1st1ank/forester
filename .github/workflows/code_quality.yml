@@ -9,6 +9,8 @@ jobs:
     name: "Flake8 stylecheck"
     runs-on: [ubuntu-latest]
     steps:
+      - name: "Git checkout"
+        uses: actions/checkout@v1
       - name: Set up Python ${{ env.STD_PYTHON }}
         uses: actions/setup-python@v1
         with:
@@ -29,6 +31,8 @@ jobs:
     name: "Pylint static code analysis"
     runs-on: [ubuntu-latest]
     steps:
+      - name: "Git checkout"
+        uses: actions/checkout@v1
       - name: Set up Python ${{ env.STD_PYTHON }}
         uses: actions/setup-python@v1
         with:
@@ -56,10 +60,8 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-
       - name: "Git checkout"
         uses: actions/checkout@v1
-
       - name: Install pipenv
         run:  |
           python --version
@@ -67,20 +69,8 @@ jobs:
           pip3 install pip pipenv setuptools
           pipenv install --dev
           pipenv install importlib_metadata
-          
       - name: Run tests
         run:  |
           python --version
           pip3 --version
           pipenv run pytest tests
-          
-#       - name: Install dependencies with pipenv
-#         uses: VaultVulp/action-pipenv@master
-#         with:
-#           args: install --dev
-
-#       - name: Run tests
-#         uses: VaultVulp/action-pipenv@master
-#         with:
-#           args: run pytest tests
-

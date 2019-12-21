@@ -29,17 +29,16 @@ jobs:
     name: "Pylint static code analysis"
     runs-on: [ubuntu-latest]
     steps:
-#       - name: Set up Python ${{ std_python_version }}
-#         uses: actions/setup-python@v1
-#         with:
-#           python-version: ${{ std_python_version }}
+      - name: Set up Python ${{ std_python_version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ std_python_version }}
       - name: Install pylint
         run:  |
           python --version
           pip3 --version
           pip3 install pylint setuptools
       - name: Code analysis
-        # stop the build if there are Python syntax errors or undefined names
         run: python3 -m pylint command
           
   # Add Radon, black, mypy? (see https://realpython.com/python-code-quality/)
@@ -67,6 +66,7 @@ jobs:
           pip3 --version
           pip3 install pip pipenv setuptools
           pipenv install --dev
+          pipenv install importlib_metadata
           
       - name: Run tests
         run:  |

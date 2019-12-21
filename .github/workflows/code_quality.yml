@@ -29,10 +29,10 @@ jobs:
     name: "Pylint static code analysis"
     runs-on: [ubuntu-latest]
     steps:
-      - name: Set up Python ${{ std_python_version }}
+      - name: Set up Python ${{ env.STD_PYTHON }}
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ std_python_version }}
+          python-version: ${{ env.STD_PYTHON }}
       - name: Install pylint
         run:  |
           python --version

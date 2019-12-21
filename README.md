@@ -1,6 +1,6 @@
 # command
 
-Shell scripts for nursing a linux machine
+A collections of scripts for the linux shell.
 
 ## Usage
 

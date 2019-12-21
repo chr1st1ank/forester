@@ -20,11 +20,17 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
+    - name: Pyversion
+      run: python --version
+
     - name: Install dependencies with pipenv
       uses: VaultVulp/action-pipenv@master
       with:
         args: install --dev
-      
+    
+    - name: Pyversion2
+      run: python --version
+
 #   - name: Install dependencies
 #     run: |
 #       python -m pip install --upgrade pipenv

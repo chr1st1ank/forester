@@ -1,4 +1,4 @@
-name: Python package
+name: Code Quality
 
 on: [push]
 
@@ -19,6 +19,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        python -m pip install --upgrade pipenv
         pipenv install --dev
     - name: Lint with flake8
       run: |

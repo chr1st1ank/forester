@@ -23,7 +23,7 @@ setup(
     author_email="chr1st1ank@pferdeplan.de",
 
     description="Shell scripts for nursing a linux machine",
-    long_description=read("README.rst"),
+    long_description=read("README.md"),
 
     packages=find_packages(exclude=('tests',)),
 

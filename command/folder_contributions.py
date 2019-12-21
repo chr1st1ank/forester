@@ -11,117 +11,130 @@ import sys
 
 
 def folder_contributions(folder_path):
-	"""Get the total disk space and disk space contributions of all subfolders in the given path.
+    """Get the total disk space and disk space contributions of all subfolders in the given path.
 
 	Returns:
 		Tuple of dictionaries: (totals, contributions)
 		Both are in the form {folder_name: size}
 	"""
-	inodes_read = set()
-	inode_sizes = {}
+    inodes_read = set()
+    inode_sizes = {}
 
-	def getsize(folder_path, recurse=True):
-		assert os.path.isdir(folder_path)
+    def getsize(folder_path, recurse=True):
+        assert os.path.isdir(folder_path)
 
-		if len(inode_sizes) % 100 == 0:
-			sys.stdout.write(f"\r... scanning ({len(inode_sizes)} folders) ...")
-			sys.stdout.flush()
+        if len(inode_sizes) % 100 == 0:
+            sys.stdout.write(f"\r... scanning ({len(inode_sizes)} folders) ...")
+            sys.stdout.flush()
 
-		# Collect data about the folder itself
-		st = os.lstat(folder_path)
-		uniqueinode = "%s%s" % (st[stat.ST_INO], st[stat.ST_DEV])
-		size = st[stat.ST_SIZE]
-		inode_sizes[uniqueinode] = size
-		inodes_read.add(uniqueinode)
-		inodes = {uniqueinode}
+        # Collect data about the folder itself
+        st = os.lstat(folder_path)
+        uniqueinode = "%s%s" % (st[stat.ST_INO], st[stat.ST_DEV])
+        size = st[stat.ST_SIZE]
+        inode_sizes[uniqueinode] = size
+        inodes_read.add(uniqueinode)
+        inodes = {uniqueinode}
 
-		# Collect data about the children
-		for dir_entry in os.scandir(folder_path):
-			if dir_entry.is_dir(follow_symlinks=False):
-				if recurse:
-					s, i = getsize(dir_entry.path)
-					size += s
-					inodes.update(i)
-			else:
-				uniqueinode = "%s%s" % (dir_entry.inode(), dir_entry.stat(follow_symlinks=False)[stat.ST_DEV])
-				inodes.add(uniqueinode)
-				if uniqueinode in inodes_read:
-					size += inode_sizes[uniqueinode]
-				else:
-					size += dir_entry.stat(follow_symlinks=False)[stat.ST_SIZE]
-					inode_sizes[uniqueinode] = dir_entry.stat(follow_symlinks=False)[stat.ST_SIZE]
-					inodes_read.add(uniqueinode)
+        # Collect data about the children
+        for dir_entry in os.scandir(folder_path):
+            if dir_entry.is_dir(follow_symlinks=False):
+                if recurse:
+                    s, i = getsize(dir_entry.path)
+                    size += s
+                    inodes.update(i)
+            else:
+                uniqueinode = "%s%s" % (
+                    dir_entry.inode(),
+                    dir_entry.stat(follow_symlinks=False)[stat.ST_DEV],
+                )
+                inodes.add(uniqueinode)
+                if uniqueinode in inodes_read:
+                    size += inode_sizes[uniqueinode]
+                else:
+                    size += dir_entry.stat(follow_symlinks=False)[stat.ST_SIZE]
+                    inode_sizes[uniqueinode] = dir_entry.stat(follow_symlinks=False)[
+                        stat.ST_SIZE
+                    ]
+                    inodes_read.add(uniqueinode)
 
-		return size, inodes
+        return size, inodes
 
-	def calc_contribution(inodes, inode_sets):
-		exclusive_inodes = inodes
-		for s in inode_sets:
-			exclusive_inodes = exclusive_inodes.difference(s)
+    def calc_contribution(inodes, inode_sets):
+        exclusive_inodes = inodes
+        for s in inode_sets:
+            exclusive_inodes = exclusive_inodes.difference(s)
 
-		return sum([inode_sizes[i] for i in exclusive_inodes])
+        return sum([inode_sizes[i] for i in exclusive_inodes])
 
-	folder_names = [f for f in os.listdir(folder_path) if os.path.isdir(folder_path + '/' + f)]
-	inode_sets = {}
-	totals = {}
-	for f in folder_names:
-		s, i = getsize(folder_path + '/' + f)
-		inode_sets[f] = i
-		totals[f] = s
+    folder_names = [
+        f for f in os.listdir(folder_path) if os.path.isdir(folder_path + "/" + f)
+    ]
+    inode_sets = {}
+    totals = {}
+    for f in folder_names:
+        s, i = getsize(folder_path + "/" + f)
+        inode_sets[f] = i
+        totals[f] = s
 
-	sys.stdout.write(f"\rScanned {len(inodes_read)} inodes                      \n")
-	sys.stdout.flush()
+    sys.stdout.write(f"\rScanned {len(inodes_read)} inodes                      \n")
+    sys.stdout.flush()
 
-	contributions = {}
-	for f in folder_names:
-		contributions[f] = calc_contribution(inode_sets[f], [inode_sets[other] for other in folder_names if other != f])
+    contributions = {}
+    for f in folder_names:
+        contributions[f] = calc_contribution(
+            inode_sets[f], [inode_sets[other] for other in folder_names if other != f]
+        )
 
-	s, i = getsize(folder_path, recurse=False)
-	totals['.'] = sum(totals.values()) + s
-	contributions['.'] = calc_contribution(i, inode_sets)
+    s, i = getsize(folder_path, recurse=False)
+    totals["."] = sum(totals.values()) + s
+    contributions["."] = calc_contribution(i, inode_sets)
 
-	return totals, contributions
+    return totals, contributions
 
 
 def format_number(number):
-	try:
-		return "{:,}".format(number)
-	except ValueError:
-		return str(number)
+    try:
+        return "{:,}".format(number)
+    except ValueError:
+        return str(number)
 
 
 def output(name, total, contrib, colsize):
-	print(f"{name.ljust(colsize)}{format_number(total).rjust(colsize)}{format_number(contrib).rjust(colsize)}")
+    print(
+        f"{name.ljust(colsize)}{format_number(total).rjust(colsize)}{format_number(contrib).rjust(colsize)}"
+    )
 
 
 def main():
-	colsize = 30
-	sort_order = 'contribs'
+    colsize = 30
+    sort_order = "contribs"
 
-	p = sys.argv[1].strip()
-	if p[-1] == os.path.sep and len(p) > 1:
-		p = p[:-1]
+    p = sys.argv[1].strip()
+    if p[-1] == os.path.sep and len(p) > 1:
+        p = p[:-1]
 
-	totals, contributions = folder_contributions(p)
+    totals, contributions = folder_contributions(p)
 
-	output("Folder", "Total size (B)", "Size of unique inodes (B)", colsize)
-	print("-"*(3*colsize))
+    output("Folder", "Total size (B)", "Size of unique inodes (B)", colsize)
+    print("-" * (3 * colsize))
 
-	if sort_order == 'name':
-		folders = sorted(totals.keys(), reverse=True)
-	elif sort_order == 'totals':
-		folders = (k for k, v in sorted(totals.items(), key=lambda item: item[1]))
-	elif sort_order == 'contribs':
-		folders = (k for k, v in sorted(contributions.items(), key=lambda item: item[1]))
+    if sort_order == "name":
+        folders = sorted(totals.keys(), reverse=True)
+    elif sort_order == "totals":
+        folders = (k for k, v in sorted(totals.items(), key=lambda item: item[1]))
+    elif sort_order == "contribs":
+        folders = (
+            k for k, v in sorted(contributions.items(), key=lambda item: item[1])
+        )
 
-	for f in folders:
-		output(f, totals[f], contributions[f], colsize)
+    for f in folders:
+        output(f, totals[f], contributions[f], colsize)
 
-	print("="*(3*colsize))
-	output("Total", totals['.'], "-", colsize)
+    print("=" * (3 * colsize))
+    output("Total", totals["."], "-", colsize)
 
-	return 0
+    return 0
 
 
-if __name__ == '__main__':
-	main()
+if __name__ == "__main__":
+    main()

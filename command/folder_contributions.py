@@ -13,10 +13,10 @@ import sys
 def folder_contributions(folder_path):
     """Get the total disk space and disk space contributions of all subfolders in the given path.
 
-	Returns:
-		Tuple of dictionaries: (totals, contributions)
-		Both are in the form {folder_name: size}
-	"""
+    Returns:
+        Tuple of dictionaries: (totals, contributions)
+        Both are in the form {folder_name: size}
+    """
     inodes_read = set()
     inode_sizes = {}
 

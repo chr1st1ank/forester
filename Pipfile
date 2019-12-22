@@ -4,10 +4,8 @@ verify_ssl = true
 
 [dev-packages]
 advbumpversion = "*"
-black = "*"
 coverage = "*"
 pytest = "*"
 
 [packages]
 command = {path = ".",editable = true}
-pylint = "*"

@@ -6,6 +6,7 @@ verify_ssl = true
 advbumpversion = "*"
 coverage = "*"
 pytest = "*"
+pytest-cov = "*"
 
 [packages]
 command = {path = ".",editable = true}

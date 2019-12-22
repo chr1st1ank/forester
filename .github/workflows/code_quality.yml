@@ -75,7 +75,7 @@ jobs:
           pip3 --version
           pipenv run pytest --cov=./ tests
       - name: Publish coverage
-        if: matrix.python-version == 3.7
+        if: matrix.python-version == env.STD_PYTHON
         run:  |
           pip install codecov
           codecov -t ${{ secrets.codecov }}

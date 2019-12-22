@@ -2,6 +2,8 @@
 
 A collections of scripts for the linux shell.
 
+[![codecov](https://codecov.io/gh/chr1st1ank/command/branch/master/graph/badge.svg)](https://codecov.io/gh/chr1st1ank/command)
+
 ## Usage
 
 ## Installation
@@ -28,7 +30,3 @@ Install the actual dependencies into a virtual environment and activate it:
 ## Licence
 
 The code in this repository is made available under the MIT license. Feel free to use, change and distribute it.
-
-## Authors
-
-`command` was written by `chr1st1ank <chr1st1ank@pferdeplan.de>`_.

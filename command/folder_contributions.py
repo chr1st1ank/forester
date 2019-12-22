@@ -17,6 +17,7 @@ def folder_contributions(folder_path):
         Tuple of dictionaries: (totals, contributions)
         Both are in the form {folder_name: size}
     """
+    folder_path = str(folder_path)
     inodes_read = set()
     inode_sizes = {}
 
@@ -86,7 +87,7 @@ def folder_contributions(folder_path):
         )
 
     s, i = getsize(folder_path, recurse=False)
-    totals["."] = sum(totals.values()) + s
+    totals["."] = sum(inode_sizes.values())
     contributions["."] = calc_contribution(i, inode_sets)
 
     return totals, contributions

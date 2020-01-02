@@ -9,6 +9,8 @@ import os
 import stat
 import sys
 
+from .util import format_number
+
 
 def folder_contributions(folder_path):
     """Get the total disk space and disk space contributions of all subfolders in the given path.
@@ -91,13 +93,6 @@ def folder_contributions(folder_path):
     contributions["."] = calc_contribution(i, inode_sets)
 
     return totals, contributions
-
-
-def format_number(number):
-    try:
-        return "{:,}".format(number)
-    except ValueError:
-        return str(number)
 
 
 def output(name, total, contrib, colsize):

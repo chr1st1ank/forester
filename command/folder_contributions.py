@@ -9,7 +9,7 @@ import os
 import stat
 import sys
 
-from .util import format_number
+from command.util import format_number
 
 
 def folder_contributions(folder_path):
@@ -70,7 +70,7 @@ def folder_contributions(folder_path):
         return sum([inode_sizes[i] for i in exclusive_inodes])
 
     folder_names = [
-        f for f in os.listdir(folder_path) if os.path.isdir(folder_path + "/" + f)
+        f for f in os.listdir(folder_path) if os.path.isdir(folder_path + "/" + f) and f != '.'
     ]
     inode_sets = {}
     totals = {}
@@ -111,6 +111,7 @@ def main():
 
     totals, contributions = folder_contributions(p)
 
+    print()
     output("Folder", "Total size (B)", "Size of unique inodes (B)", colsize)
     print("-" * (3 * colsize))
 
@@ -124,7 +125,8 @@ def main():
         )
 
     for f in folders:
-        output(f, totals[f], contributions[f], colsize)
+        if f != ".":
+            output(f, totals[f], contributions[f], colsize)
 
     print("=" * (3 * colsize))
     output("Total", totals["."], "-", colsize)

@@ -3,10 +3,10 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [dev-packages]
-advbumpversion = "*"
 coverage = "*"
 pytest = "*"
 pytest-cov = "*"
 
 [packages]
 command = {path = ".",editable = true}
+bump2version = "*"

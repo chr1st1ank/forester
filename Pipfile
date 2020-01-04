@@ -7,6 +7,9 @@ coverage = "*"
 pytest = "*"
 pytest-cov = "*"
 bump2version = "*"
+setuptools = "*"
+wheel = "*"
+twine = "*"
 
 [packages]
 command = {path = ".",editable = true}

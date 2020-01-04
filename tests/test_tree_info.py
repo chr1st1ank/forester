@@ -1,5 +1,8 @@
 """Unit tests for command.tree_info"""
 import os
+from unittest.mock import patch
+import re
+import sys
 
 import pytest
 
@@ -35,7 +38,33 @@ def collected_info_and_path(folder_tree):
 def test_tree_info_folder_count(collected_info_and_path):
     """Test if the number of folders shown is correct"""
     collected_info, tree_path = collected_info_and_path
-    folder_counts = {
-        path: i.folder_count for path, i in collected_info.items()
-    }
+    folder_counts = {path: i.folder_count for path, i in collected_info.items()}
     assert folder_counts[str(tree_path)] == 4
+
+
+@pytest.mark.parametrize(
+    "main_output_regex",
+    [
+        r"""^.*
+Folder                                                 # Folders        # Files              m_time
+----------------------------------------------------------------------------------------------------
+d2/d3                                                          1              2 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
+d2                                                             2              3 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
+d1                                                             1              1 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
+----------------------------------------------------------------------------------------------------
+.                                                              4              4 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d$"""
+    ],
+)
+def test_tree_info_main(capsys, folder_tree, main_output_regex):
+    with patch.object(sys, "argv", ["tree_info.py", str(folder_tree.absolute())]):
+        tree_info.main()
+
+    out, err = capsys.readouterr()
+    print()
+    print(out)
+    print()
+
+    assert not err
+    assert re.match(
+        main_output_regex, out, re.DOTALL
+    ), f"Output string doesn't match regex: {out}"

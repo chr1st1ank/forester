@@ -15,3 +15,9 @@ def format_timestamp(timestamp) -> str:
         return datetime.fromtimestamp(timestamp).isoformat(sep=' ', timespec='seconds')
     except TypeError:
         return str(timestamp)
+
+
+def cut_to_length(text: str, length: int):
+    if len(text) > length:
+        return f"{text[:length-3]}..."
+    return text

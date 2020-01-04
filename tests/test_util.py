@@ -22,6 +22,20 @@ def test_format_timestamp():
     """Test date formatting"""
     assert util.format_timestamp(1578096397) == "2020-01-04 01:06:37"
 
+
 def test_format_timestamp_error():
     """Test handling of invalid input. Should be returned as string only."""
     assert util.format_timestamp("abc") == "abc"
+
+
+@pytest.mark.parametrize(
+    "text, length, expected_output",
+    [
+        ("abcdefg", 8, "abcdefg"),
+        ("abcdefg", 7, "abcdefg"),
+        ("abcdefg", 6, "abc..."),
+    ],
+)
+def test_cut_to_length(text, length, expected_output):
+    """Test the cut_to_length function"""
+    assert util.cut_to_length(text, length) == expected_output

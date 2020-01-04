@@ -5,11 +5,12 @@ TODO: Add usage info
 """
 from collections import namedtuple
 import os
+from os.path import realpath, relpath
 import stat
 import sys
 from typing import Dict
 
-from command.util import format_number
+from command.util import cut_to_length, format_number, format_timestamp
 
 
 TreeInfo = namedtuple("TreeInfo", ["file_count", "folder_count", "last_mtime"])
@@ -64,20 +65,22 @@ def tree_info(folder_path, verbose=False) -> Dict[str, TreeInfo]:
     return collected_info
 
 
-def _output(path: str, *info_fields, name_width, number_width):
-    print(
-        f"{path[-name_width:].ljust(name_width)}"
-        + "".join(f"{format_number(f).rjust(number_width)}" for f in info_fields)
+def _output(path, *info_fields, column_widths):
+    line = f"{cut_to_length(path, column_widths[0]-1).ljust(column_widths[0]-1)}"
+    line += ''.join(
+        f" {cut_to_length(f, column_widths[i+1]-1).rjust(column_widths[i+1]-1)}"
+        for i, f in enumerate(info_fields)
     )
+    print(line)
 
 
 def main():
-    name_width = 50
-    number_width = 15
+    column_widths = (50, 15, 15, 20)
 
     p = sys.argv[1].strip()
     if p[-1] == os.path.sep and len(p) > 1:
         p = p[:-1]
+    p = realpath(p)
 
     collected_info: Dict[str, TreeInfo] = tree_info(p, verbose=True)
 
@@ -86,32 +89,23 @@ def main():
         "# Folders",
         "# Files",
         "m_time",
-        name_width=name_width,
-        number_width=number_width,
+        column_widths=column_widths
     )
-    print("-" * (name_width + 3 * number_width))
+    print("-" * sum(column_widths))
 
-    folders = sorted(collected_info.keys(), reverse=True)
+    folders = sorted(filter(lambda k: realpath(k) != p, collected_info.keys()), reverse=True)
+    folders.append(p)
 
     for f in folders:
+        if f == p:
+            print("-" * sum(column_widths))
         _output(
-            f,
-            collected_info[f].folder_count,
-            collected_info[f].file_count,
-            collected_info[f].last_mtime,
-            name_width=name_width,
-            number_width=number_width,
+            relpath(f, p),
+            format_number(collected_info[f].folder_count),
+            format_number(collected_info[f].file_count),
+            format_timestamp(collected_info[f].last_mtime),
+            column_widths=column_widths
         )
-
-    print("-" * (name_width + 3 * number_width))
-    _output(
-        "Total",
-        sum(i.folder_count for i in collected_info.values()),
-        sum(i.file_count for i in collected_info.values()),
-        max(i.last_mtime for i in collected_info.values()),
-        name_width=name_width,
-        number_width=number_width,
-    )
 
 if __name__ == "__main__":
     main()

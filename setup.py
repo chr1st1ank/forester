@@ -15,7 +15,7 @@ def read(filename):
 
 setup(
     name="forester",
-    version="0.2.0",
+    version="0.3.0",
     url="https://github.com/chr1st1ank/forester",
     license='MIT',
 

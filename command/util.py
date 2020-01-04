@@ -11,4 +11,7 @@ def format_number(number) -> str:
 
 def format_timestamp(timestamp) -> str:
     """Format a unix timestamp in ISO date format"""
-    return datetime.fromtimestamp(timestamp).isoformat(sep=' ', timespec='seconds')
+    try:
+        return datetime.fromtimestamp(timestamp).isoformat(sep=' ', timespec='seconds')
+    except TypeError:
+        return str(timestamp)

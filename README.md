@@ -1,8 +1,8 @@
-# command
+# forester
 
 This will be my collection of scripts for the linux shell. Currently I am onboarding them one by one. So come back in a couple of weeks.
 
-[![codecov](https://codecov.io/gh/chr1st1ank/command/branch/master/graph/badge.svg)](https://codecov.io/gh/chr1st1ank/command)
+[![codecov](https://codecov.io/gh/chr1st1ank/forester/branch/master/graph/badge.svg)](https://codecov.io/gh/chr1st1ank/forester)
 
 ## Usage
 

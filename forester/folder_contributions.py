@@ -9,7 +9,7 @@ import os
 import stat
 import sys
 
-from command.util import format_number
+from forester.util import format_number
 
 
 def folder_contributions(folder_path):

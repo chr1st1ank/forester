@@ -10,7 +10,7 @@ import stat
 import sys
 from typing import Dict
 
-from command.util import cut_to_length, format_number, format_timestamp
+from forester.util import cut_to_length, format_number, format_timestamp
 
 
 TreeInfo = namedtuple("TreeInfo", ["file_count", "folder_count", "last_mtime"])

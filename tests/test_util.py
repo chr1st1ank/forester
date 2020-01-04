@@ -1,6 +1,6 @@
 import pytest
 
-from command import util
+from forester import util
 
 
 @pytest.mark.parametrize(

@@ -1,4 +1,4 @@
-"""Unit tests for command.tree_info"""
+"""Unit tests for forester.tree_info"""
 import os
 from unittest.mock import patch
 import re
@@ -6,7 +6,7 @@ import sys
 
 import pytest
 
-from command import tree_info
+from forester import tree_info
 
 
 @pytest.fixture

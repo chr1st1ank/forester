@@ -22,10 +22,10 @@ jobs:
           pip3 install flake8
       - name: Syntax check
         # stop the build if there are Python syntax errors or undefined names
-        run: python3 -m flake8 --count --select=E9,F63,F7,F82 --show-source --statistics command tests
+        run: python3 -m flake8 --count --select=E9,F63,F7,F82 --show-source --statistics forester tests
       - name: Style check
         # exit-zero treats all errors as warnings.
-        run: python3 -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics command tests
+        run: python3 -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics forester tests
         
   pylint:
     name: "Pylint static code analysis"
@@ -43,7 +43,7 @@ jobs:
           pip3 --version
           pip3 install pylint setuptools
       - name: Code analysis
-        run: python3 -m pylint command || exit 0
+        run: python3 -m pylint forester || exit 0
           
   # Add Radon, black, mypy? (see https://realpython.com/python-code-quality/)
   test:

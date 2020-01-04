@@ -1,10 +1,10 @@
-"""Unit tests for command.folder_contributions"""
+"""Unit tests for forester.folder_contributions"""
 import os
 import subprocess
 
 import pytest
 
-from command import folder_contributions
+from forester import folder_contributions
 
 
 @pytest.fixture

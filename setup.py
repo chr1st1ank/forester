@@ -14,9 +14,9 @@ def read(filename):
 
 
 setup(
-    name="command",
+    name="forester",
     version="0.2.0",
-    url="https://github.com/chr1st1ank/command",
+    url="https://github.com/chr1st1ank/forester",
     license='MIT',
 
     author="chr1st1ank",
@@ -40,8 +40,8 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'folder-contributions = command.folder_contributions:main',
-            'tree-info = command.tree_info:main',
+            'folder-contributions = forester.folder_contributions:main',
+            'tree-info = forester.tree_info:main',
         ],
     }
 )

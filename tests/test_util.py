@@ -16,3 +16,8 @@ from command import util
 def test_format_number(input, expected_output):
     """Test the number formatting"""
     assert util.format_number(input) == expected_output
+
+
+def test_format_timestamp():
+    """Test date formatting"""
+    assert util.format_timestamp(1578096397) == "2020-01-04 01:06:37"

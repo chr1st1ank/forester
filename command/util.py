@@ -1,3 +1,4 @@
+from datetime import datetime
 
 
 def format_number(number) -> str:
@@ -6,3 +7,8 @@ def format_number(number) -> str:
         return "{:,}".format(number)
     except ValueError:
         return str(number)
+
+
+def format_timestamp(timestamp) -> str:
+    """Format a unix timestamp in ISO date format"""
+    return datetime.fromtimestamp(timestamp).isoformat(sep=' ', timespec='seconds')

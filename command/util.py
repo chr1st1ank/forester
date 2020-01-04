@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def format_number(number) -> str:
@@ -12,7 +12,7 @@ def format_number(number) -> str:
 def format_timestamp(timestamp) -> str:
     """Format a unix timestamp in ISO date format"""
     try:
-        return datetime.fromtimestamp(timestamp).isoformat(sep=' ', timespec='seconds')
+        return datetime.fromtimestamp(timestamp, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     except TypeError:
         return str(timestamp)
 

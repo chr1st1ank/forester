@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c97acfe8190866d9af2774a2e6a0f6f43b0c9da83936941cf7379ca4870b567b"
+            "sha256": "3d8da6813b6be465b79366b48d013e3c86e749a0151c2c0803dc00541dedfb85"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -13,13 +13,6 @@
         ]
     },
     "default": {
-        "bump2version": {
-            "hashes": [
-                "sha256:524bde030318fe2543038defe0f77739605636fef96924883813cb290cf79c1e",
-                "sha256:bfcc051498dda9fd9ac8634689f4516e1c20fdeeace3278932cc6e1248418b36"
-            ],
-            "version": "==0.5.11"
-        },
         "command": {
             "editable": true,
             "path": "."
@@ -32,6 +25,13 @@
                 "sha256:f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72"
             ],
             "version": "==19.3.0"
+        },
+        "bump2version": {
+            "hashes": [
+                "sha256:524bde030318fe2543038defe0f77739605636fef96924883813cb290cf79c1e",
+                "sha256:bfcc051498dda9fd9ac8634689f4516e1c20fdeeace3278932cc6e1248418b36"
+            ],
+            "version": "==0.5.11"
         },
         "coverage": {
             "hashes": [

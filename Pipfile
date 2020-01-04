@@ -6,7 +6,7 @@ verify_ssl = true
 coverage = "*"
 pytest = "*"
 pytest-cov = "*"
+bump2version = "*"
 
 [packages]
 command = {path = ".",editable = true}
-bump2version = "*"

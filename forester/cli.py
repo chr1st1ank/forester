@@ -46,12 +46,12 @@ def main(*raw_args):
     # Common path argument
     args = parser.parse_args(raw_args)
 
-    print(args)
-
     if args.version:
         show_version()
-
-    args.func(args)
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_usage()
 
 
 def call_main():

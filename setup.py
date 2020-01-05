@@ -41,8 +41,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'folder-contributions = forester.folder_contributions:main',
-            'tree-info = forester.tree_info:main',
+            'forester = forester.cli:call_main',
         ],
     }
 )

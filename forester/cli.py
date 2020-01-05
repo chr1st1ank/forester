@@ -54,5 +54,9 @@ def main(*raw_args):
     args.func(args)
 
 
-if __name__ == "__main__":
+def call_main():
     main(*sys.argv[1:])
+
+
+if __name__ == "__main__":
+    call_main()

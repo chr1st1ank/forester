@@ -61,6 +61,7 @@ def tree_info(folder_path, verbose=False) -> Dict[str, TreeInfo]:
 
     collect_folder_info(folder_path)
     if verbose:
+        sys.stdout.write(f"\rScanned {len(collected_info)} folders           ")
         print("\n")
     return collected_info
 
@@ -74,15 +75,12 @@ def _output(path, *info_fields, column_widths):
     print(line)
 
 
-def main():
+def print_tree_info(args):
     column_widths = (50, 15, 15, 20)
 
-    p = sys.argv[1].strip()
-    if p[-1] == os.path.sep and len(p) > 1:
-        p = p[:-1]
-    p = realpath(p)
+    path = realpath(args.path)
 
-    collected_info: Dict[str, TreeInfo] = tree_info(p, verbose=True)
+    collected_info: Dict[str, TreeInfo] = tree_info(path, verbose=(not args.quiet))
 
     _output(
         "Folder",
@@ -93,19 +91,16 @@ def main():
     )
     print("-" * sum(column_widths))
 
-    folders = sorted(filter(lambda k: realpath(k) != p, collected_info.keys()), reverse=True)
-    folders.append(p)
+    folders = sorted(filter(lambda k: realpath(k) != path, collected_info.keys()), reverse=True)
+    folders.append(path)
 
     for f in folders:
-        if f == p:
+        if f == path:
             print("-" * sum(column_widths))
         _output(
-            relpath(f, p),
+            relpath(f, path),
             format_number(collected_info[f].folder_count),
             format_number(collected_info[f].file_count),
             format_timestamp(collected_info[f].last_mtime),
             column_widths=column_widths
         )
-
-if __name__ == "__main__":
-    main()

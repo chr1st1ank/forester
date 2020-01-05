@@ -36,7 +36,7 @@ def get_total_from_du(folder_name):
 
 def test_total_size(folder_tree):
     """Teset if the total sizes from folder_contributions() are correct"""
-    totals, _ = folder_contributions.folder_contributions(folder_tree)
+    totals, _ = folder_contributions.folder_contributions(folder_tree, verbose=False)
 
     for f in ["d1", "d2"]:
         assert totals[f] == get_total_from_du(
@@ -49,8 +49,8 @@ def test_total_size(folder_tree):
 
 
 def test_contribs(folder_tree):
-    """Teset if the contribution sizes from folder_contributions() are correct"""
-    _, contribs = folder_contributions.folder_contributions(folder_tree)
+    """Test if the contribution sizes from folder_contributions() are correct"""
+    _, contribs = folder_contributions.folder_contributions(folder_tree, verbose=False)
 
     assert (
         contribs["d1"] == get_total_from_du(folder_tree / "d1") - 1024

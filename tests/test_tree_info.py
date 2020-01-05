@@ -42,11 +42,11 @@ def test_tree_info_folder_count(collected_info_and_path):
     assert folder_counts[str(tree_path)] == 4
 
 
+@pytest.mark.parametrize("quiet_mode", [False, True])
 @pytest.mark.parametrize(
     "main_output_regex",
     [
-        r"""^.*
-Folder                                                 # Folders        # Files              m_time
+        r"""^.*Folder                                                 # Folders        # Files              m_time
 ----------------------------------------------------------------------------------------------------
 d2/d3                                                          1              2 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
 d2                                                             2              3 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
@@ -55,9 +55,13 @@ d1                                                             1              1 
 .                                                              4              4 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d$"""
     ],
 )
-def test_tree_info_main(capsys, folder_tree, main_output_regex):
-    with patch.object(sys, "argv", ["tree_info.py", str(folder_tree.absolute())]):
-        tree_info.main()
+def test_tree_info_main(capsys, folder_tree, quiet_mode, main_output_regex):
+    """Test the full output against a regular expression."""
+    class InfoArgs:
+        quiet = quiet_mode
+        path = str(folder_tree.absolute())
+
+    tree_info.print_tree_info(args=InfoArgs())
 
     out, err = capsys.readouterr()
     print()

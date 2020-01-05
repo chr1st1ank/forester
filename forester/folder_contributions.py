@@ -12,7 +12,7 @@ import sys
 from forester.util import format_number
 
 
-def folder_contributions(folder_path):
+def folder_contributions(folder_path, verbose):
     """Get the total disk space and disk space contributions of all subfolders in the given path.
 
     Returns:
@@ -26,7 +26,7 @@ def folder_contributions(folder_path):
     def getsize(folder_path, recurse=True):
         assert os.path.isdir(folder_path)
 
-        if len(inode_sizes) % 100 == 0:
+        if verbose and len(inode_sizes) % 100 == 0:
             sys.stdout.write(f"\r... scanning ({len(inode_sizes)} folders) ...")
             sys.stdout.flush()
 
@@ -79,8 +79,9 @@ def folder_contributions(folder_path):
         inode_sets[f] = i
         totals[f] = s
 
-    sys.stdout.write(f"\rScanned {len(inodes_read)} inodes                      \n")
-    sys.stdout.flush()
+    if verbose:
+        sys.stdout.write(f"\rScanned {len(inodes_read)} inodes                      \n")
+        sys.stdout.flush()
 
     contributions = {}
     for f in folder_names:
@@ -101,17 +102,14 @@ def output(name, total, contrib, colsize):
     )
 
 
-def main():
+def print_folder_contributions(args):
     colsize = 30
     sort_order = "contribs"
 
-    p = sys.argv[1].strip()
-    if p[-1] == os.path.sep and len(p) > 1:
-        p = p[:-1]
+    p = os.path.realpath(args.path)
 
-    totals, contributions = folder_contributions(p)
+    totals, contributions = folder_contributions(p, verbose=(not args.quiet))
 
-    print()
     output("Folder", "Total size (B)", "Size of unique inodes (B)", colsize)
     print("-" * (3 * colsize))
 
@@ -130,9 +128,3 @@ def main():
 
     print("=" * (3 * colsize))
     output("Total", totals["."], "-", colsize)
-
-    return 0
-
-
-if __name__ == "__main__":
-    main()

@@ -4,8 +4,8 @@ forester
 This will be my collection of scripts for the linux shell. Currently I
 am onboarding them one by one. So come back in a couple of weeks.
 
-.. |codecov| image:: https://codecov.io/gh/chr1st1ank/forester/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/chr1st1ank/forester
+.. image:: https://codecov.io/gh/chr1st1ank/forester/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/chr1st1ank/forester
 
 
 Features

@@ -1,8 +1,6 @@
 """Unit tests for forester.tree_info"""
 import os
-from unittest.mock import patch
 import re
-import sys
 
 import pytest
 
@@ -45,13 +43,13 @@ def test_tree_info_folder_count(collected_info_and_path):
 @pytest.mark.parametrize(
     "main_output_regex",
     [
-        r"""^.*Folder                                                 # Folders        # Files              m_time
-----------------------------------------------------------------------------------------------------
-d2/d3                                                          1              2 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
-d2                                                             2              3 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
-d1                                                             1              1 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
-====================================================================================================
-.                                                              4              4 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d$"""
+        r"""^.*Folder  \s{40}       # Folders        # Files              m_time
+-{100}
+d2/d3                 \s{40} 1              2 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
+d2                    \s{40} 2              3 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
+d1                    \s{40} 1              1 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d
+={100}
+.                     \s{40} 4              4 \d{4}-\d\d-\d\d \d\d:\d\d:\d\d$"""
     ],
 )
 @pytest.mark.parametrize("quiet_mode", [False, True])
@@ -81,8 +79,10 @@ def test_tree_info_main(
         if max_depth_arg < 1:
             unwanted_folders.append("d1")
             unwanted_folders.append("d2")
-    main_output_regex = '\n'.join(
-        l for l in main_output_regex.splitlines() if not any(f in l for f in unwanted_folders)
+    main_output_regex = "\n".join(
+        l
+        for l in main_output_regex.splitlines()
+        if not any(f in l for f in unwanted_folders)
     )
     print("main_output_regex", main_output_regex)
     # Now check the actual output

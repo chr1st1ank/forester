@@ -18,6 +18,10 @@ def format_timestamp(timestamp) -> str:
 
 
 def cut_to_length(text: str, length: int):
+    """Shorten a string to the given length if necessary.
+
+    If shortened the returned string ends with `...`
+    """
     if len(text) > length:
         return f"{text[:length-3]}..."
     return text

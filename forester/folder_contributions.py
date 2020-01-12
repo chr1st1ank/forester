@@ -1,9 +1,10 @@
 #!/usr/bin/python
 """List the total disk space and disk space contributions of all subfolders in the given path.
 
-Both figures only differ if there are inodes which are hardlinks from multiple of these folders. Then the contributions
-show how much disk space would be gained if one of the folders would be deleted. Inodes with hardlinks from outside
-would not be deleted in this case.
+Both figures only differ if there are inodes which are hardlinks from multiple of these
+folders. Then the contributions show how much disk space would be gained if one of the
+folders would be deleted. Inodes with hardlinks from outside would not be deleted in
+this case.
 """
 import os
 import stat
@@ -70,7 +71,9 @@ def folder_contributions(folder_path, verbose):
         return sum([inode_sizes[i] for i in exclusive_inodes])
 
     folder_names = [
-        f for f in os.listdir(folder_path) if os.path.isdir(folder_path + "/" + f) and f != '.'
+        f
+        for f in os.listdir(folder_path)
+        if os.path.isdir(folder_path + "/" + f) and f != "."
     ]
     inode_sets = {}
     totals = {}
@@ -98,7 +101,8 @@ def folder_contributions(folder_path, verbose):
 
 def output(name, total, contrib, colsize):
     print(
-        f"{name.ljust(colsize)}{format_number(total).rjust(colsize)}{format_number(contrib).rjust(colsize)}"
+        f"{name.ljust(colsize)}{format_number(total).rjust(colsize)}"
+        f"{format_number(contrib).rjust(colsize)}"
     )
 
 

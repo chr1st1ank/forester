@@ -10,8 +10,11 @@ am onboarding them one by one. So come back in a couple of weeks.
 
 Features
 ========
+Offers commands to:
 * Summarize the size and latest changes of folders in a directory tree
 * List how much space the subfolders in a directory tree take when considering hardlinks between them
+
+Pure Python. No dependencies - just the standard library.
 
 
 Usage

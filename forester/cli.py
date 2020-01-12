@@ -3,11 +3,8 @@ import argparse
 import os
 import sys
 
+import forester
 from forester import folder_contributions, tree_info
-
-
-def show_version():
-    print()
 
 
 def main(*raw_args):
@@ -19,7 +16,9 @@ def main(*raw_args):
         help="Suppress unnecessary output, such as progress reports",
     )
     parser.add_argument(
-        "--version", help="Show version information",
+        "--version",
+        action="version",
+        version=f"%(prog)s version {forester.__version__}"
     )
     subparsers = parser.add_subparsers()
 
@@ -28,27 +27,29 @@ def main(*raw_args):
         "info", help="Informative directory tree overview"
     )
     info_parser.add_argument(
+        "--max-depth",
+        type=int,
+        help="Print the total for a directory only if it is N or fewer levels "
+        "below the command line argument",
+    )
+    info_parser.add_argument(
         "path", default=os.getcwd(), nargs="?", help="Directory to analyze"
     )
     info_parser.set_defaults(func=tree_info.print_tree_info)
 
     # Parser for subcommand "contribs"
     contribs_parser = subparsers.add_parser(
-        "contribs",
-        help="List the contributions of subfolders to the total disk space",
+        "contribs", help="List the contributions of subfolders to the total disk space",
     )
     contribs_parser.add_argument(
         "path", default=os.getcwd(), nargs="?", help="Directory to analyze"
     )
     contribs_parser.set_defaults(func=folder_contributions.print_folder_contributions)
 
-
     # Common path argument
     args = parser.parse_args(raw_args)
 
-    if args.version:
-        show_version()
-    if hasattr(args, 'func'):
+    if hasattr(args, "func"):
         args.func(args)
     else:
         parser.print_usage()

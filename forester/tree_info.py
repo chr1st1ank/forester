@@ -90,7 +90,7 @@ def print_tree_info(args):
 
     for f in folders:
         if f == path:
-            print("-" * sum(column_widths))
+            print("=" * sum(column_widths))
         relative_to_target = relpath(f, path)
         if (  # Make sure we only print down to the desired max_depth
             args.max_depth is None

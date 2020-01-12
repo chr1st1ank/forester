@@ -90,7 +90,6 @@ def mock_folder_contributions():
     [
         (("contribs",), ("path",)),
         (("contribs", "."), ("path",)),
-        (("contribs", "--max-depth", "3", "."), ("path", "max_depth")),
     ],
 )
 def test_folder_contrib_params(mock_folder_contributions, cli_args, expected_args):

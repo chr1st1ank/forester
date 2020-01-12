@@ -42,12 +42,6 @@ def main(*raw_args):
         "contribs", help="List the contributions of subfolders to the total disk space",
     )
     contribs_parser.add_argument(
-        "--max-depth",
-        type=int,
-        help="Print the total for a directory only if it is N or fewer levels "
-        "below the command line argument",
-    )
-    contribs_parser.add_argument(
         "path", default=os.getcwd(), nargs="?", help="Directory to analyze"
     )
     contribs_parser.set_defaults(func=folder_contributions.print_folder_contributions)

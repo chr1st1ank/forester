@@ -53,9 +53,7 @@ def tree_info(folder_path, verbose=False) -> Dict[str, TreeInfo]:
                 )
                 total_n_files += 1
 
-        collected_info[path] = TreeInfo(
-            total_n_files, total_n_folders, max_m_time
-        )
+        collected_info[path] = TreeInfo(total_n_files, total_n_folders, max_m_time)
 
         return collected_info[path]
 
@@ -68,7 +66,7 @@ def tree_info(folder_path, verbose=False) -> Dict[str, TreeInfo]:
 
 def _output(path, *info_fields, column_widths):
     line = f"{cut_to_length(path, column_widths[0]-1).ljust(column_widths[0]-1)}"
-    line += ''.join(
+    line += "".join(
         f" {cut_to_length(f, column_widths[i+1]-1).rjust(column_widths[i+1]-1)}"
         for i, f in enumerate(info_fields)
     )
@@ -82,25 +80,27 @@ def print_tree_info(args):
 
     collected_info: Dict[str, TreeInfo] = tree_info(path, verbose=(not args.quiet))
 
-    _output(
-        "Folder",
-        "# Folders",
-        "# Files",
-        "m_time",
-        column_widths=column_widths
-    )
+    _output("Folder", "# Folders", "# Files", "m_time", column_widths=column_widths)
     print("-" * sum(column_widths))
 
-    folders = sorted(filter(lambda k: realpath(k) != path, collected_info.keys()), reverse=True)
+    folders = sorted(
+        filter(lambda k: realpath(k) != path, collected_info.keys()), reverse=True
+    )
     folders.append(path)
 
     for f in folders:
         if f == path:
             print("-" * sum(column_widths))
-        _output(
-            relpath(f, path),
-            format_number(collected_info[f].folder_count),
-            format_number(collected_info[f].file_count),
-            format_timestamp(collected_info[f].last_mtime),
-            column_widths=column_widths
-        )
+        relative_to_target = relpath(f, path)
+        if (  # Make sure we only print down to the desired max_depth
+            args.max_depth is None
+            or (relative_to_target.count(os.path.sep) < args.max_depth)
+            or (f == path)  # Always keep root
+        ):
+            _output(
+                relative_to_target,
+                format_number(collected_info[f].folder_count),
+                format_number(collected_info[f].file_count),
+                format_timestamp(collected_info[f].last_mtime),
+                column_widths=column_widths,
+            )

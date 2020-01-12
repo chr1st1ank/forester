@@ -28,7 +28,6 @@ def main(*raw_args):
     )
     info_parser.add_argument(
         "--max-depth",
-        nargs=1,
         type=int,
         help="Print the total for a directory only if it is N or fewer levels "
         "below the command line argument",
@@ -44,7 +43,6 @@ def main(*raw_args):
     )
     contribs_parser.add_argument(
         "--max-depth",
-        nargs=1,
         type=int,
         help="Print the total for a directory only if it is N or fewer levels "
         "below the command line argument",

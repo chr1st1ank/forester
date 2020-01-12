@@ -22,7 +22,9 @@ def ensure_no_action_calls():
 
 def test_version(ensure_no_action_calls, capsys):
     """Ensure the parameter `version` makes the cli print the current version number"""
-    cli.main("--version")
+    with pytest.raises(SystemExit) as exit_error:
+        cli.main("--version")
+    assert exit_error.value.code == 0, "Expected application to exit with code 0"
     out, err = capsys.readouterr()
     assert err == "", "Expected no output on stderr!"
     assert (

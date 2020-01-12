@@ -39,8 +39,7 @@ def test_usage(ensure_no_action_calls, capsys, params):
     out, err = capsys.readouterr()
     assert err == "", "Expected no output on stderr!"
     assert re.match(
-        r"^usage: .+\.py \[\-h\] \[\-\-quiet\] \[\-\-version\] "
-        r"\{info,contribs\} \.\.\.$",
+        r"^usage: .+ \[\-h\] \[\-\-quiet\] \[\-\-version\] \{info,contribs\} \.\.\.$",
         out,
     ), "No usage hint or in wrong format!"
 

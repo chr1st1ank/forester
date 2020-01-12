@@ -61,7 +61,7 @@ def folder_contributions(folder_path, verbose):
                             stat.ST_SIZE
                         ]
                         inodes_read.add(uniqueinode)
-        except PermissionError as e:
+        except PermissionError:
             print(f"Permission error for {folder_path}", file=sys.stderr)
 
         return size, inodes

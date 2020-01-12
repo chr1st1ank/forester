@@ -105,13 +105,14 @@ Forester is available on Pypi. Therefore installation is as straight forward as:
 
 Contributing
 ============
-Interested in particular changes? Found a bug?
-Please read `CONTRIBUTING.md <https://github.com/chr1st1ank/forester/CONTRIBUTING.md>`__
+Interested in particular changes? Found a bug? Please read
+`CONTRIBUTING.md <https://github.com/chr1st1ank/forester/blob/master/CONTRIBUTING.md>`__
 for instructions on how to participate.
 
 
 License
 =======
 The code in this repository is made available freely and without warranty under the
-terms of the MIT license (see `LICENSE <https://github.com/chr1st1ank/forester/LICENSE>`__).
+terms of the MIT license
+(see `LICENSE <https://github.com/chr1st1ank/forester/blob/master/LICENSE>`__).
 Feel free to use, change and distribute it.

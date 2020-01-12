@@ -40,26 +40,29 @@ def folder_contributions(folder_path, verbose):
         inodes = {uniqueinode}
 
         # Collect data about the children
-        for dir_entry in os.scandir(folder_path):
-            if dir_entry.is_dir(follow_symlinks=False):
-                if recurse:
-                    s, i = getsize(dir_entry.path)
-                    size += s
-                    inodes.update(i)
-            else:
-                uniqueinode = "%s%s" % (
-                    dir_entry.inode(),
-                    dir_entry.stat(follow_symlinks=False)[stat.ST_DEV],
-                )
-                inodes.add(uniqueinode)
-                if uniqueinode in inodes_read:
-                    size += inode_sizes[uniqueinode]
+        try:
+            for dir_entry in os.scandir(folder_path):
+                if dir_entry.is_dir(follow_symlinks=False):
+                    if recurse:
+                        s, i = getsize(dir_entry.path)
+                        size += s
+                        inodes.update(i)
                 else:
-                    size += dir_entry.stat(follow_symlinks=False)[stat.ST_SIZE]
-                    inode_sizes[uniqueinode] = dir_entry.stat(follow_symlinks=False)[
-                        stat.ST_SIZE
-                    ]
-                    inodes_read.add(uniqueinode)
+                    uniqueinode = "%s%s" % (
+                        dir_entry.inode(),
+                        dir_entry.stat(follow_symlinks=False)[stat.ST_DEV],
+                    )
+                    inodes.add(uniqueinode)
+                    if uniqueinode in inodes_read:
+                        size += inode_sizes[uniqueinode]
+                    else:
+                        size += dir_entry.stat(follow_symlinks=False)[stat.ST_SIZE]
+                        inode_sizes[uniqueinode] = dir_entry.stat(follow_symlinks=False)[
+                            stat.ST_SIZE
+                        ]
+                        inodes_read.add(uniqueinode)
+        except PermissionError as e:
+            print(f"Permission error for {folder_path}", file=sys.stderr)
 
         return size, inodes
 
@@ -70,21 +73,22 @@ def folder_contributions(folder_path, verbose):
 
         return sum([inode_sizes[i] for i in exclusive_inodes])
 
-    folder_names = [
-        f
-        for f in os.listdir(folder_path)
-        if os.path.isdir(folder_path + "/" + f) and f != "."
-    ]
+    try:
+        folder_names = [
+            f
+            for f in os.listdir(folder_path)
+            if os.path.isdir(folder_path + "/" + f) and f != "."
+        ]
+    except PermissionError:
+        print(f"Permission error for {folder_path}", file=sys.stderr)
+        sys.exit(1)
+
     inode_sets = {}
     totals = {}
     for f in folder_names:
         s, i = getsize(folder_path + "/" + f)
         inode_sets[f] = i
         totals[f] = s
-
-    if verbose:
-        sys.stdout.write(f"\rScanned {len(inodes_read)} inodes                      \n")
-        sys.stdout.flush()
 
     contributions = {}
     for f in folder_names:
@@ -95,6 +99,11 @@ def folder_contributions(folder_path, verbose):
     s, i = getsize(folder_path, recurse=False)
     totals["."] = sum(inode_sizes.values())
     contributions["."] = calc_contribution(i, inode_sets)
+
+    if verbose:
+        sys.stdout.write("\r" + 40*" " + "\r")
+        sys.stdout.write(f"Scanned {len(inodes_read)} inodes\n")
+        sys.stdout.flush()
 
     return totals, contributions
 

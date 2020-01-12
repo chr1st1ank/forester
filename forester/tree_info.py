@@ -43,10 +43,17 @@ def tree_info(folder_path, verbose=False) -> Dict[str, TreeInfo]:
         # Collect data about the children
         for dir_entry in os.scandir(path):
             if dir_entry.is_dir(follow_symlinks=False):
-                n_files, n_folders, m_time = collect_folder_info(dir_entry.path)
-                total_n_files += n_files
-                total_n_folders += n_folders
-                max_m_time = max(max_m_time, m_time)
+                try:
+                    n_files, n_folders, m_time = collect_folder_info(dir_entry.path)
+                    total_n_files += n_files
+                    total_n_folders += n_folders
+                    max_m_time = max(max_m_time, m_time)
+                except PermissionError as e:
+                    print(f"Permission error for {dir_entry.path}", file=sys.stderr)
+                    total_n_folders += 1
+                    max_m_time = max(
+                        max_m_time, dir_entry.stat(follow_symlinks=False)[stat.ST_MTIME]
+                    )
             else:
                 max_m_time = max(
                     max_m_time, dir_entry.stat(follow_symlinks=False)[stat.ST_MTIME]
@@ -57,10 +64,18 @@ def tree_info(folder_path, verbose=False) -> Dict[str, TreeInfo]:
 
         return collected_info[path]
 
-    collect_folder_info(folder_path)
+    try:
+        collect_folder_info(folder_path)
+    except PermissionError:
+        sys.stdout.write("\r" + 30*" " + "\r")
+        print(f"Permission error for {folder_path}", file=sys.stderr)
+        sys.exit(1)
+
     if verbose:
-        sys.stdout.write(f"\rScanned {len(collected_info)} folders           ")
+        sys.stdout.write("\r" + 40*" " + "\r")
+        sys.stdout.write(f"Scanned {len(collected_info)} folders")
         print("\n")
+
     return collected_info
 
 

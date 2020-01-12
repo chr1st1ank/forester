@@ -12,20 +12,30 @@ def show_version():
 
 def main(*raw_args):
     # Main parser
-    parser = argparse.ArgumentParser(description="Swiss-army knife for directory trees")
+    parser = argparse.ArgumentParser(
+        description="Swiss-army knife for directory trees"
+    )
     parser.add_argument(
         "--quiet",
         action="store_true",
         help="Suppress unnecessary output, such as progress reports",
     )
     parser.add_argument(
-        "--version", help="Show version information",
+        "--version",
+        action="store_true",
+        help="Show version information",
     )
     subparsers = parser.add_subparsers()
 
     # Parser for subcommand "info"
     info_parser = subparsers.add_parser(
         "info", help="Informative directory tree overview"
+    )
+    info_parser.add_argument(
+        "--max-depth",
+        nargs=1, type=int,
+        help="Print the total for a directory only if it is N or fewer levels "
+             "below the command line argument"
     )
     info_parser.add_argument(
         "path", default=os.getcwd(), nargs="?", help="Directory to analyze"

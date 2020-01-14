@@ -1,0 +1,10 @@
+jobs:
+  include:
+    language: python
+    python:
+      - "3.8"
+    install:
+    #  - pip install flake8
+      - pip install pylint
+      - pip install .
+    script: pylint forester

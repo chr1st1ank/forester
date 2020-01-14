@@ -4,7 +4,8 @@ jobs:
     python:
       - "3.8"
     install:
-    #  - pip install flake8
-      - pip install pylint
+      - pip install flake8 pylint
       - pip install .
-    script: pylint forester
+    script:
+      - pylint --exit-zero forester
+      - flake8 forester
